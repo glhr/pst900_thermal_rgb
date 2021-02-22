@@ -39,3 +39,5 @@ pstnet/data/weights/*/
 
 # Ignore inference directory
 pstnet/data/inference/*/
+
+pstnet/data/data/

@@ -138,30 +138,42 @@ class DatasetUtilities:
         
 
 def main():
-    pst900_path = '/home/shreyas/Dropbox/RGBDT_Segmentation/PST900_RGBT_Dataset/'
+    pst900_path = '/home/robotlab/rob10/learning-driveability-heatmaps/datasets/pst900-rgbt/PST900_RGBT_Dataset/'
     split_type = 'test'
 
     # Instantiate utilities
     utils = DatasetUtilities(pst900_path, split_type)
 
     # Example dataset sample loader
-    rgb, depth, thermal, thermal_raw, label = utils.get_sample(140)
+    sample = 216
+    rgb, depth, thermal, thermal_raw, label = utils.get_sample(sample)
 
     cv2.imshow("RGB", rgb)
     cv2.imshow("Thermal", thermal)
     cv2.waitKey(0)
 
+    depth = depth-np.min(depth)
+    print(np.min(depth),np.max(depth))
+    depth = 255*depth/np.max(depth)
+    
+    cv2.imwrite(f"{sample}_rgb.png", rgb)
+    cv2.imwrite(f"{sample}_depth.png", depth)
+	
+
     # Example hole filling for Thermal image
     thermal_filled = utils.fill_thermal(thermal)
 
     cv2.imshow("Thermal_Filled", thermal_filled)
+    cv2.imwrite(f"{sample}_thermalfilled.png", thermal_filled)
     cv2.waitKey(0)
+	
 
     # Example colormapping for Label image
     colormapped_label = utils.visualize_label(label)
 
     cv2.imshow("Label", colormapped_label)
     cv2.waitKey(0)
+    cv2.imwrite(f"{sample}_label.png", colormapped_label)
 
 if __name__ == '__main__':
     main()
